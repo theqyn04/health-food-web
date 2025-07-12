@@ -1,34 +1,38 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import LoginForm from './components/LoginForm';
-import Home from './components/pages/Home';
-import RegisterForm from './components/RegisterForm';
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import './assets/css/App.css';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import {} from 'react-router-dom';
+import AuthLayout from './layouts/auth';
+import AdminLayout from './layouts/admin';
+import RTLLayout from './layouts/rtl';
+import {
+  ChakraProvider,
+  // extendTheme
+} from '@chakra-ui/react';
+import initialTheme from './theme/theme'; //  { themeGreen }
+import { useState } from 'react';
+// Chakra imports
 
-const PrivateRoute = ({ children }) => {
-  const token = localStorage.getItem('token');
-  return token ? children : <Navigate to="/login" />;
-};
-
-function App() {
+export default function Main() {
+  // eslint-disable-next-line
+  const [currentTheme, setCurrentTheme] = useState(initialTheme);
   return (
-    <Router>
+    <ChakraProvider theme={currentTheme}>
       <Routes>
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/register" element={<RegisterForm />} />
+        <Route path="auth/*" element={<AuthLayout />} />
         <Route
-          path="/dashboard"
+          path="admin/*"
           element={
-            <PrivateRoute>
-              <Home />  {/* Sử dụng Home làm Dashboard */}
-            </PrivateRoute>
+            <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
           }
         />
-        <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route
+          path="rtl/*"
+          element={
+            <RTLLayout theme={currentTheme} setTheme={setCurrentTheme} />
+          }
+        />
+        <Route path="/" element={<Navigate to="/admin" replace />} />
       </Routes>
-    </Router>
+    </ChakraProvider>
   );
 }
-
-export default App;
