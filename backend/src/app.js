@@ -53,16 +53,19 @@ app.get('/health', (req, res) => {
 
 // Import routes
 const foodRoutes = require('./routes/food.routes');
-const userRoutes = require('./routes/user.routes');
+const signupRoutes = require('./routes/signupRoutes');
 const loginRoutes = require('./routes/login.routes');
+const authRoutes = require('./routes/authRoutes');
 
 // Authentication middleware
 const authenticate = require('./middlewares/auth');
 
 // Apply routes
 app.use('/api/foods', foodRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/users', signupRoutes);
 app.use('/api/login', loginRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/profile', signupRoutes);
 
 // 404 handler
 app.use((req, res) => {
